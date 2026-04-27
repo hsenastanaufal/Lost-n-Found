@@ -29,12 +29,64 @@ class _ReportFormPageState extends State<ReportFormPage> {
   XFile? _selectedImage;
   bool _isLoading = false;
 
-  Future<void> _pickImage() async {
+  Future<void> _pickImage(ImageSource source) async {
     final picker = ImagePicker();
-    final picked = await picker.pickImage(source: ImageSource.gallery, imageQuality: 70);
+    final picked = await picker.pickImage(source: source, imageQuality: 70);
     if (picked != null) {
       setState(() => _selectedImage = picked);
     }
+  }
+
+  void _showImageSourceDialog() {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => Container(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text('Pilih Sumber Foto', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 24),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                _buildSourceOption(Icons.camera_alt_outlined, 'Kamera', () {
+                  Navigator.pop(context);
+                  _pickImage(ImageSource.camera);
+                }),
+                _buildSourceOption(Icons.photo_library_outlined, 'Galeri', () {
+                  Navigator.pop(context);
+                  _pickImage(ImageSource.gallery);
+                }),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSourceOption(IconData icon, String label, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.red.shade50,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(icon, color: Colors.red, size: 32),
+          ),
+          const SizedBox(height: 8),
+          Text(label, style: const TextStyle(fontWeight: FontWeight.w500)),
+        ],
+      ),
+    );
   }
 
   Future<void> _submitReport() async {
@@ -171,7 +223,7 @@ class _ReportFormPageState extends State<ReportFormPage> {
                       child: Column(
                         children: [
                           GestureDetector(
-                            onTap: _pickImage,
+                            onTap: _showImageSourceDialog,
                             child: Container(
                               height: 150,
                               width: double.infinity,
