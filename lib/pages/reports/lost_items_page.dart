@@ -154,8 +154,8 @@ class _LostItemsPageState extends State<LostItemsPage> {
 
   Widget _buildFilterChip(String label, String value) {
     final isSelected = _filterType == value;
-    final Color selectedColor = value == 'hilang' || value == 'all' ? Colors.red : const Color(0xFFFFA000);
-    final Color bgSelectedColor = value == 'hilang' || value == 'all' ? Colors.red.shade50 : const Color(0xFFFFF8E1);
+    final Color selectedColor = value == 'hilang' || value == 'all' ? Colors.red : Colors.teal;
+    final Color bgSelectedColor = value == 'hilang' || value == 'all' ? Colors.red.shade50 : Colors.teal.shade50;
     
     return GestureDetector(
       onTap: () => setState(() => _filterType = value),

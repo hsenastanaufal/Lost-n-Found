@@ -118,10 +118,10 @@ class _ReportFormPageState extends State<ReportFormPage> {
   @override
   Widget build(BuildContext context) {
     final isHilang = widget.reportType == 'hilang';
-    final themeColor = isHilang ? Colors.red : const Color(0xFFFFA000); // Amber/Gold
+    final themeColor = isHilang ? Colors.red : Colors.teal;
     final gradientColors = isHilang
         ? [const Color(0xFFD32F2F), const Color(0xFF9A0007)]
-        : [const Color(0xFFFFA000), const Color(0xFFE65100)]; // Gold to Deep Orange
+        : [const Color(0xFF00796B), const Color(0xFF004D40)]; 
     final title = isHilang ? 'Lapor Kehilangan' : 'Lapor Temuan';
     final subtitle = isHilang
         ? 'Isi formulir ini jika Anda kehilangan barang di area kampus.'

@@ -60,8 +60,8 @@ class ItemListTile extends StatelessWidget {
       iconColor = Colors.red;
       iconData = Icons.outbox_rounded;
     } else {
-      iconBgColor = const Color(0xFFFFF8E1); // Light Amber
-      iconColor = const Color(0xFFFFA000); // Amber
+      iconBgColor = Colors.teal.shade50;
+      iconColor = Colors.teal;
       iconData = Icons.move_to_inbox_rounded;
     }
 
@@ -115,13 +115,13 @@ class ItemListTile extends StatelessWidget {
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                             decoration: BoxDecoration(
-                              color: item.type == 'hilang' ? Colors.red.shade50 : const Color(0xFFFFF8E1),
+                              color: item.type == 'hilang' ? Colors.red.shade50 : Colors.teal.shade50,
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Text(
                               item.type == 'hilang' ? 'Barang Hilang' : 'Barang Temuan',
                               style: TextStyle(
-                                color: item.type == 'hilang' ? Colors.red.shade700 : const Color(0xFFFF8F00),
+                                color: item.type == 'hilang' ? Colors.red.shade700 : Colors.teal.shade700,
                                 fontSize: 10,
                                 fontWeight: FontWeight.bold,
                               ),

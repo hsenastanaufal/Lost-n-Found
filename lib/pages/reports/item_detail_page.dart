@@ -92,13 +92,13 @@ class _ItemDetailPageState extends State<ItemDetailPage> {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                    color: widget.item.type == 'hilang' ? Colors.red.shade100 : const Color(0xFFFFF8E1),
+                    color: widget.item.type == 'hilang' ? Colors.red.shade100 : Colors.teal.shade100,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
                     widget.item.type == 'hilang' ? 'Barang Hilang' : 'Barang Temuan',
                     style: TextStyle(
-                      color: widget.item.type == 'hilang' ? Colors.red.shade900 : const Color(0xFFFF8F00),
+                      color: widget.item.type == 'hilang' ? Colors.red.shade900 : Colors.teal.shade900,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
