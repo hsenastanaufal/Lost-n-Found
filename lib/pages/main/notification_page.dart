@@ -162,7 +162,7 @@ class _NotificationPageState extends State<NotificationPage> {
   Color _getNotifColor(String type) {
     switch (type) {
       case 'report_approved': return Colors.green;
-      case 'new_report': return Colors.orange;
+      case 'new_report': return Colors.teal;
       case 'profile_update': return Colors.blue;
       default: return Colors.red;
     }

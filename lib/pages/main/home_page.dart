@@ -168,7 +168,7 @@ class HomePage extends StatelessWidget {
                   MenuCard(
                     title: 'Lapor\nTemuan',
                     icon: Icons.inventory_2_rounded,
-                    color: const Color(0xFFFFA000), // Amber/Gold
+                    color: Colors.teal,
                     onTap: () => Navigator.push(context,
                         MaterialPageRoute(builder: (_) => ReportFormPage(currentUser: currentUser, reportType: 'ditemukan'))),
                   ),
@@ -276,7 +276,7 @@ class HomePage extends StatelessWidget {
                                           Container(
                                             padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                                             decoration: BoxDecoration(
-                                              color: isHilang ? Colors.pink.shade50 : const Color(0xFFFFF8E1),
+                                              color: isHilang ? Colors.pink.shade50 : Colors.teal.shade50,
                                               borderRadius: BorderRadius.circular(6),
                                             ),
                                             child: Text(
@@ -284,7 +284,7 @@ class HomePage extends StatelessWidget {
                                               style: TextStyle(
                                                 fontSize: 9,
                                                 fontWeight: FontWeight.bold,
-                                                color: isHilang ? Colors.pink.shade700 : const Color(0xFFFF8F00),
+                                                color: isHilang ? Colors.pink.shade700 : Colors.teal.shade700,
                                               ),
                                             ),
                                           ),
