@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "670685364579",
+    "firebase_url": "https://lost-and-found-telu-79dd7-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "lost-and-found-telu-79dd7",
+    "storage_bucket": "lost-and-found-telu-79dd7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:670685364579:android:95e915d0d7492dcd1e9356",
+        "android_client_info": {
+          "package_name": "com.example.lostnfound"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCj3OtkRACIp4HwQbwIsdAphvqLcefX0MQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
