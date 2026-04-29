@@ -184,12 +184,24 @@ class _ItemDetailPageState extends State<ItemDetailPage> {
                       
                       final Uri waUrl = Uri.parse('https://wa.me/$formattedPhone?text=Halo,%20saya%20menghubungi%20terkait%20laporan%20${Uri.encodeComponent(widget.item.name)}%20di%20aplikasi%20Lost%20&%20Found%20TelU.');
                       
-                      if (await canLaunchUrl(waUrl)) {
-                        await launchUrl(waUrl, mode: LaunchMode.externalApplication);
-                      } else {
+                      try {
+                        if (await canLaunchUrl(waUrl)) {
+                          await launchUrl(waUrl, mode: LaunchMode.externalApplication);
+                        } else {
+                          // Fallback to whatsapp:// if wa.me is not working
+                          final Uri waSchemeUrl = Uri.parse('whatsapp://send?phone=$formattedPhone&text=${Uri.encodeComponent('Halo, saya menghubungi terkait laporan ${widget.item.name} di aplikasi Lost & Found TelU.')}');
+                          if (await canLaunchUrl(waSchemeUrl)) {
+                            await launchUrl(waSchemeUrl, mode: LaunchMode.externalApplication);
+                          } else if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Tidak dapat membuka aplikasi WhatsApp. Pastikan WhatsApp terinstal.')),
+                            );
+                          }
+                        }
+                      } catch (e) {
                         if (context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Tidak dapat membuka aplikasi WhatsApp.')),
+                            SnackBar(content: Text('Error: ${e.toString()}')),
                           );
                         }
                       }
