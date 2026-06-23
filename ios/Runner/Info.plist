@@ -71,5 +71,9 @@
 		<string>whatsapp</string>
 		<string>https</string>
 	</array>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Aplikasi ini memerlukan akses lokasi untuk menentukan di mana barang hilang atau ditemukan.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Aplikasi ini memerlukan akses lokasi untuk menentukan di mana barang hilang atau ditemukan.</string>
 </dict>
 </plist>
