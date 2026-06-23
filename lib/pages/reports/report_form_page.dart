@@ -381,11 +381,13 @@ class _ReportFormPageState extends State<ReportFormPage> {
                                 children: [
                                   Icon(Icons.check_circle_outline, color: themeColor, size: 16),
                                   const SizedBox(width: 6),
-                                  Text(
-                                    'Koordinat: ${_selectedLatitude!.toStringAsFixed(6)}, ${_selectedLongitude!.toStringAsFixed(6)}',
-                                    style: TextStyle(fontSize: 12, color: themeColor, fontWeight: FontWeight.bold),
+                                  Expanded(
+                                    child: Text(
+                                      'Koordinat: ${_selectedLatitude!.toStringAsFixed(6)}, ${_selectedLongitude!.toStringAsFixed(6)}',
+                                      style: TextStyle(fontSize: 12, color: themeColor, fontWeight: FontWeight.bold),
+                                    ),
                                   ),
-                                  const Spacer(),
+                                  const SizedBox(width: 8),
                                   TextButton(
                                     onPressed: () {
                                       setState(() {
