@@ -2,9 +2,12 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'dart:io' show File;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:geocoding/geocoding.dart';
 import '../../models/lost_item.dart';
 import '../../services/firestore_service.dart';
 import '../../services/cloudinary_service.dart';
+import 'map_picker_page.dart';
 
 class ReportFormPage extends StatefulWidget {
   final Map<String, dynamic> currentUser;
@@ -28,6 +31,68 @@ class _ReportFormPageState extends State<ReportFormPage> {
 
   XFile? _selectedImage;
   bool _isLoading = false;
+  double? _selectedLatitude;
+  double? _selectedLongitude;
+  bool _isLocating = false;
+
+  Future<void> _selectLocationOnMap() async {
+    final LatLng? result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MapPickerPage(
+          initialLatitude: _selectedLatitude,
+          initialLongitude: _selectedLongitude,
+        ),
+      ),
+    );
+
+    if (result != null) {
+      setState(() {
+        _selectedLatitude = result.latitude;
+        _selectedLongitude = result.longitude;
+        _isLocating = true;
+      });
+
+      try {
+        List<Placemark> placemarks = await placemarkFromCoordinates(
+          result.latitude,
+          result.longitude,
+        );
+
+        if (placemarks.isNotEmpty) {
+          final Placemark place = placemarks.first;
+          final List<String> addressParts = [];
+          
+          if (place.name != null && place.name!.isNotEmpty) {
+            addressParts.add(place.name!);
+          }
+          if (place.thoroughfare != null && place.thoroughfare!.isNotEmpty) {
+            addressParts.add(place.thoroughfare!);
+          }
+          if (place.subLocality != null && place.subLocality!.isNotEmpty) {
+            addressParts.add(place.subLocality!);
+          }
+          if (place.locality != null && place.locality!.isNotEmpty) {
+            addressParts.add(place.locality!);
+          }
+          
+          final String formattedAddress = addressParts.join(', ');
+          if (formattedAddress.isNotEmpty) {
+            _locationController.text = formattedAddress;
+          }
+        }
+      } catch (e) {
+        debugPrint('Geocoding error: $e');
+        if (_locationController.text.isEmpty) {
+          _locationController.text = 'Koordinat: ${result.latitude.toStringAsFixed(6)}, ${result.longitude.toStringAsFixed(6)}';
+        }
+      } finally {
+        if (mounted) {
+          setState(() => _isLocating = false);
+        }
+      }
+    }
+  }
 
   Future<void> _pickImage(ImageSource source) async {
     final picker = ImagePicker();
@@ -115,6 +180,8 @@ class _ReportFormPageState extends State<ReportFormPage> {
         reporterEmail: widget.currentUser['email'] ?? '',
         reporterPhone: widget.currentUser['phone'] ?? '',
         imageUrl: imageUrl,
+        latitude: _selectedLatitude,
+        longitude: _selectedLongitude,
       );
 
       await FirestoreService.addItem(newItem);
@@ -129,7 +196,11 @@ class _ReportFormPageState extends State<ReportFormPage> {
       _nameController.clear();
       _locationController.clear();
       _descriptionController.clear();
-      setState(() => _selectedImage = null);
+      setState(() {
+        _selectedImage = null;
+        _selectedLatitude = null;
+        _selectedLongitude = null;
+      });
       FocusScope.of(context).unfocus();
 
       showDialog(
@@ -282,6 +353,20 @@ class _ReportFormPageState extends State<ReportFormPage> {
                               labelText: isHilang ? 'Lokasi Hilang Terakhir' : 'Lokasi Penemuan',
                               hintText: 'Cth: TULT Lantai 3',
                               prefixIcon: Icon(Icons.location_on_outlined, color: Colors.grey.shade600),
+                              suffixIcon: IconButton(
+                                icon: _isLocating
+                                    ? const SizedBox(
+                                        width: 20,
+                                        height: 20,
+                                        child: CircularProgressIndicator(strokeWidth: 2, color: Colors.grey),
+                                      )
+                                    : Icon(
+                                        _selectedLatitude != null ? Icons.edit_location : Icons.map_outlined,
+                                        color: _selectedLatitude != null ? themeColor : Colors.grey.shade600,
+                                      ),
+                                onPressed: _selectLocationOnMap,
+                                tooltip: 'Pilih lokasi di peta',
+                              ),
                               filled: true,
                               fillColor: Colors.grey.shade50,
                               border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
@@ -289,6 +374,35 @@ class _ReportFormPageState extends State<ReportFormPage> {
                             ),
                             validator: (v) => (v == null || v.isEmpty) ? 'Lokasi tidak boleh kosong' : null,
                           ),
+                          if (_selectedLatitude != null && _selectedLongitude != null)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.check_circle_outline, color: themeColor, size: 16),
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    'Koordinat: ${_selectedLatitude!.toStringAsFixed(6)}, ${_selectedLongitude!.toStringAsFixed(6)}',
+                                    style: TextStyle(fontSize: 12, color: themeColor, fontWeight: FontWeight.bold),
+                                  ),
+                                  const Spacer(),
+                                  TextButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        _selectedLatitude = null;
+                                        _selectedLongitude = null;
+                                      });
+                                    },
+                                    style: TextButton.styleFrom(
+                                      padding: EdgeInsets.zero,
+                                      minimumSize: Size.zero,
+                                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                    ),
+                                    child: const Text('Hapus Koordinat', style: TextStyle(color: Colors.red, fontSize: 12)),
+                                  ),
+                                ],
+                              ),
+                            ),
                           const SizedBox(height: 16),
 
                           TextFormField(
