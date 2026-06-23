@@ -12,6 +12,8 @@ class LostItem {
   final String? imageUrl;
   final String reporterEmail;
   final String reporterPhone;
+  final double? latitude;
+  final double? longitude;
 
   LostItem({
     required this.id,
@@ -25,6 +27,8 @@ class LostItem {
     this.imageUrl,
     required this.reporterEmail,
     required this.reporterPhone,
+    this.latitude,
+    this.longitude,
   });
 
   /// Konversi ke Map untuk disimpan ke Firestore.
@@ -40,6 +44,8 @@ class LostItem {
       'imageUrl': imageUrl,
       'reporterEmail': reporterEmail,
       'reporterPhone': reporterPhone,
+      'latitude': latitude,
+      'longitude': longitude,
     };
   }
 
@@ -57,6 +63,8 @@ class LostItem {
       imageUrl: map['imageUrl'] as String?,
       reporterEmail: map['reporterEmail'] as String? ?? '',
       reporterPhone: map['reporterPhone'] as String? ?? '',
+      latitude: (map['latitude'] as num?)?.toDouble(),
+      longitude: (map['longitude'] as num?)?.toDouble(),
     );
   }
 }
